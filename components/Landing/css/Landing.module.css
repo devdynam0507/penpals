@@ -1,0 +1,56 @@
+.landing-info {
+    height: 30%;
+    margin-top: 10%;
+    margin-bottom: 5%;
+
+    color: #ffe7df;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    cursor: default;
+    font-family: 'Noto Sans KR', sans-serif;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.landing-start-button-style {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #4dcc6f;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    width: 100px;
+    height: 40px;
+    transition: 0.25s;
+}
+
+.landing-start-button-event-wrapper {
+    display: inline-flex;
+    width: 100%;
+    height: 10%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.landing-start-button-event-wrapper button:active,
+.landing-start-button-event-wrapper button:hover,
+.landing-start-button-event-wrapper button:focus {
+  background: #4dca6f;
+  outline: 0;
+}
+
+.landing-start-button-event-wrapper button:disabled {
+  opacity: 0.5;
+}
