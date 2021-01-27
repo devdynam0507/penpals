@@ -43,7 +43,6 @@ app.prepare().then(() => {
   );
 
   server.post('/api/auth/signin', (req, res) => {
-    console.log('req  signin: ' + req.body.identifier);
     User.findOne({identifier: req.body.identifier, password: req.body.password }, function(err, dt) {
       if(err) {
         res.send(err);

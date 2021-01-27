@@ -1,15 +1,13 @@
- import axios from 'axios';
+import axios from 'axios';
 
- export default function requestSigninAsPost(username, password, callback) {
-     axios.post('/api/auth/signin', {
+export default async function requestSigninAsPost(username, password) {
+    const response = await axios.post('/api/auth/signin', {
         identifier: username,
         password: password 
     })
-     .then((response) => {
-        console.log("res:: " + response);
-        callback(response);
-     })
      .catch((error) => {
          console.log(error);
-     })
- };
+    })
+
+    return response;
+};
