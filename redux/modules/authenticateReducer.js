@@ -1,4 +1,4 @@
-import { SIGNIN, REQUEST_SIGNIN, FAILURE_SIGNIN } from '../actions/authenticateAction';
+import { SIGNIN, REQUEST_SIGNIN, FAILURE_SIGNIN, SIGNOUT } from '../actions/authenticateAction';
 
 const defaultState = {
     isLoggedIn: false,
@@ -25,6 +25,13 @@ const authenticateReducer = (state = defaultState, action) => {
                 ...state,
                 fetchingUpdate: false
             };
+		case SIGNOUT:
+			return {
+				...state,
+				fetchingUpdate: false,
+				isLoggedIn: false,
+				user: {}
+			}
         default:
             return state;
     }

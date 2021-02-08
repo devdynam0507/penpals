@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function requestSigninAsPost(username, password) {
+export const requestSigninAsPost = async (username, password) => {
     const response = await axios.post('/api/auth/signin', {
         identifier: username,
         password: password 
@@ -11,3 +11,17 @@ export default async function requestSigninAsPost(username, password) {
 
     return response;
 };
+
+export const handleSignout = async (user) => {
+	axios.post('/api/auth/signout', {
+		user: user
+	});
+}
+
+export const isJoined = async (identifier) => {
+	return await axios.get('/api/auth/user', {
+		params: {
+			identifier: identifier
+		}
+	});
+}

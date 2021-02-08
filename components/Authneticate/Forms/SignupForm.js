@@ -1,15 +1,20 @@
 import { React, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-class SigninForm extends Component {
-    
-    render() {
+class SignupForm extends Component {
+	
+	state = {
+		isIdentifierOverlap: true
+	};
+	
+	render() {
         const {
             handleSubmit,
             priestine, 
             submitting,
-			isJoined
+			checkIdentifierOverlap
         } = this.props;
+		const { isIdentifierOverlap } = this.state;
 
         return (
             <form onSubmit={handleSubmit}>
@@ -18,21 +23,21 @@ class SigninForm extends Component {
                     type="text"
                     component="input"
                     placeholder="아이디를 입력하세요."
+					onInput={ checkIdentifierOverlap(this, this.state) }
                 />
-				<button onClick={isJoined}>중복체크</button>
                 <Field
                     name="password"
                     type="password"
                     component="input"
                     placeholder="비밀번호를 입력하세요."
                 />
-                <button type="submit">send</button>
+                <button type="submit">회원가입</button>
             </form>
         )
     }
-
+	
 }
 
 export default reduxForm({
-    form: 'SigninForm'
-})(SigninForm);
+    form: 'SignupForm'
+})(SignupForm);

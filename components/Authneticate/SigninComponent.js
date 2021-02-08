@@ -2,8 +2,9 @@ import { React, Component } from 'react';
 import { connect } from 'react-redux';
 import SigninForm from './Forms/SigninForm';
 import Router from 'next/router';
-import signin from '../../redux/actions/authenticateAction';
-import requestSigninAsPost from '../../server/asyncConnections/UserAsync';
+import { signin } from '../../redux/actions/authenticateAction';
+import { requestSigninAsPost } from '../../server/asyncConnections/UserAsync';
+import Link from 'next/link';
 
 class SigninComponenet extends Component {
 
@@ -11,6 +12,9 @@ class SigninComponenet extends Component {
         return (
             <>
                 <SigninForm onSubmit={ this.props.onSubmitSigninForm }/>
+				<Link href="signup">
+					<a> 회원이 아니신가요? </a>						
+				</Link>
             </>
         )
     }
@@ -41,7 +45,7 @@ const mapDispatchToProps = (dispatch) => {
             requestSigninAsPost(id, password).then((res) => {
                 const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
                 localStorage.setItem('user', JSON.stringify(actionRes));
-                onRequestComplete(actionRes.data.exists);                
+                onRequestComplete(actionRes.data.exists);               
             });
         }
     }

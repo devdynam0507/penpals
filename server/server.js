@@ -41,25 +41,55 @@ app.prepare().then(() => {
       },
     }),
   );
-
+	
   server.post('/api/auth/signin', (req, res) => {
-    User.findOne({identifier: req.body.identifier, password: req.body.password }, function(err, dt) {
+    User.findOne({identifier: req.body.identifier, password: req.body.password }, function(err, user) {
       if(err) {
         res.send(err);
       } else {
-        if(dt != null) {
+        if(user != null) {
           res.json({
-            identifier: dt.identifier,
-            password: dt.password,
+            identifier: user.identifier,
+            password: user.password,
             exists: true
          });
         } else {
-          res.json({
-            exists: false
-          });
+          res.json({ exists: false });
         }
       }
     })
+  });
+	
+  server.post('/api/auth/signout', (req, res) => {
+	 User.findOne({ indentifier: req.body.user.id }, function(err, user) {
+		 if(err) {
+			 res.json({
+				 error: 500
+			 });
+		 } else {
+			 user.published_date = Date.now;
+			 user.save(function(err, product) {
+				console.log('updated user data ' + user.published_date); 
+			 });
+		 }
+	 }) 
+  });
+	
+  server.get('/api/auth/user', (req, res) => {
+	  User.findOne({ identifier: req.query.identifier }, function(err, user) {
+	  	 if(err) {
+			 res.json({
+				 error: 500
+			 });
+		 } else if(user != null) {
+			 res.json({
+				 identifier: user.identifier,
+				 exists: true
+			 });
+		 } else {
+			 res.json({ exists: false });
+		 }
+	  })
   });
 
   server.all('*', (req, res) => {
