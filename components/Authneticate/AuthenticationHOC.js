@@ -10,6 +10,7 @@ export default class AuthenticationHOC extends Component {
 	componentDidUpdate() {
 		if(this.props.isLoggedIn) {
 			alert('이미 로그인 된 회원입니다.');
+			// Messenger Component로 이동.
 		}
 	}
 	

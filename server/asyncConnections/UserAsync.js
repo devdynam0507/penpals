@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { encrypt } from '../security/securityHash';
 
+// Authentication 관련 모듈
+
 export const requestSigninAsPost = async (username, password) => {
     const response = await axios.post('/api/auth/signin', {
         identifier: username,
