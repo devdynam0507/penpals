@@ -12,10 +12,26 @@ export const requestSigninAsPost = async (username, password) => {
     return response;
 };
 
-export const handleSignout = async (user) => {
-	axios.post('/api/auth/signout', {
-		user: user
-	});
+export const handleSignout = async (user, onSignout) => {
+	const userReference = localStorage.getItem('user');
+	
+	if(userReference) {
+		axios.post('/api/auth/signout', {
+			identifier: user.identifier
+		});	
+		
+		localStorage.removeItem('user');
+		onSignout();
+	}
+}
+
+export const requestSignupAsPost = async (id, password) => {
+	const res = await axios.post('api/auth/signup', {
+		identifier: id,
+		password: password
+	})
+	
+	return res;
 }
 
 export const isJoined = async (identifier) => {

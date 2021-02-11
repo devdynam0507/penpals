@@ -1,10 +1,13 @@
 import styles from './css/Landing.module.css';
 import Link from 'next/link'
 import { handleSignout } from '../../server/asyncConnections/UserAsync';
+import { useRouter } from 'next/router';
 
 export default function Landing(props) {
 	const userObjectSize = Object.keys(props.user).length;
-	console.log(userObjectSize);
+	const router = useRouter();
+	const onHandleSignout = () => router.reload();
+	const handleSignoutWrapper = () => handleSignout(props.user, onHandleSignout);
 	
     return (
         <>
@@ -14,15 +17,16 @@ export default function Landing(props) {
 				털어놓고싶은데 내 약점을 보이는거같아 주변사람들에게 털어놓긴 힘들 때, <br/>
 				Untitled는 익명의 누군가와 대화할 수 있는 펜팔형 서비스입니다. <br/>
 			</p>
+			<p> { props.user.id } </p>
 			<div class={styles ['landing-start-button-event-wrapper']}>
 				<Link href='/signin'>
 					<button class={styles ['landing-start-button-style']}>
 						<a>시작하기</a>
 					</button>
 				</Link> <br/>
-				{ userObjectSize <= 0 ? 
+				{ userObjectSize > 0 ? 
 					<Link href='/'>
-						<a onClick={handleSignout}>로그아웃</a>
+						<a onClick={ handleSignoutWrapper }> 로그아웃</a>
 					</Link>
 					:
 					null

@@ -3,6 +3,8 @@ import BaseComponent from '../components/Global/BaseComponent';
 
 export default function Signup() {
 	return (
-		<SignupComponent/>
+		<BaseComponent>
+			<SignupComponent/>
+		</BaseComponent>
 	);
 }

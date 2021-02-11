@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const axios = require('axios');
 
 const port = 3002;
 const dev = process.env.NODE_ENV !== 'production';
@@ -20,11 +21,14 @@ const User = require('./models/User');
 app.prepare().then(() => {
   const server = express();
 
+  axios.defaults.baseURL = 'https://penpal-vafhi.run.goorm.io' // the prefix of the URL
+  console.log('axios base: ' + axios.defaults.baseURL);
+	
   mongoose.connect('mongodb://localhost:27017/test', {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
   }).then(() => console.log('Connected MongoDB'))
-  .catch(error => console.log(error)); 
-
+  .catch(error => console.log(error));
+	
   server.use(cors());
   server.use(morgan('dev'));
   server.use(bodyParser.urlencoded({ extended: true }));
@@ -61,18 +65,37 @@ app.prepare().then(() => {
   });
 	
   server.post('/api/auth/signout', (req, res) => {
-	 User.findOne({ indentifier: req.body.user.id }, function(err, user) {
+	 User.findOne({ indentifier: req.body.identifier }, function(err, user) {
 		 if(err) {
 			 res.json({
 				 error: 500
 			 });
-		 } else {
+			 console.log(err);
+		 } else if(user != null) {
 			 user.published_date = Date.now;
 			 user.save(function(err, product) {
 				console.log('updated user data ' + user.published_date); 
 			 });
 		 }
 	 }) 
+  });
+	
+  server.post('/api/auth/signup', (req, res) => {
+	 const id = req.body.identifier;
+	 const password = req.body.password;
+	  
+	 console.log("id: " + id + " password: " + password);
+	 console.log('signup req: ' + req);
+	  
+	 User.create({ identifier: id, password: password }, (err, user) => {
+		if(err) {
+			 res.json({ status: 500, error: err });
+			 console.log('failed ' + err);
+		} else {
+			 res.json( { success: true, id: id, password: password });
+		 	 console.log('success ' + user);
+		} 
+	 });
   });
 	
   server.get('/api/auth/user', (req, res) => {

@@ -17,13 +17,12 @@ class SignupForm extends Component {
 		const { isIdentifierOverlap } = this.state;
 
         return (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} method='post'>
                 <Field
                     name="id"
                     type="text"
                     component="input"
                     placeholder="아이디를 입력하세요."
-					onInput={ checkIdentifierOverlap(this, this.state) }
                 />
                 <Field
                     name="password"

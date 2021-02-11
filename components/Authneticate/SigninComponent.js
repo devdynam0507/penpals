@@ -43,8 +43,10 @@ const mapDispatchToProps = (dispatch) => {
             const password = data.password;
             
             requestSigninAsPost(id, password).then((res) => {
-                const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
-                localStorage.setItem('user', JSON.stringify(actionRes));
+				console.log(JSON.stringify(res));
+				const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
+				alert(JSON.stringify(actionRes));				
+				localStorage.setItem('user', JSON.stringify(actionRes));
                 onRequestComplete(actionRes.data.exists);               
             });
         }

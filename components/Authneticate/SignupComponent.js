@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
 import SignupForm from './Forms/SignupForm';
+import { signup } from '../../redux/actions/authenticateAction';
 import { connect } from 'react-redux';
-import { isJoined } from '../../server/asyncConnections/UserAsync';
+import { isJoined, requestSignupAsPost } from '../../server/asyncConnections/UserAsync';
 
 class SignupComponent extends Component {
 	
@@ -21,10 +22,20 @@ class SignupComponent extends Component {
 	
 	render() {
 		return (
-			<SignupForm handleSubmit={ this.props.onSubmitSignupForm } checkIdentifierOverlap={ this.props.checkIdentifierOverlap }/>
+			<>
+				<SignupForm onSubmit={ this.props.onSubmitSignupForm }/>
+			</>
 		)
 	}
 	
+}
+
+const onRequestComplete = (success) => {
+	if(success) {
+		Router.push('/');
+	} else {
+		alert('Signup rejected');
+	}
 }
 
 const mapStateToProps = (state) => {
@@ -36,12 +47,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmitSignupForm: (data) => {
+        onSubmitSignupForm: async (data) => {
             const id = data.id;
             const password = data.password;
 			
-			const isJoined = await isJoined(id).exists;
-			
+			if(id == undefined || password == undefined) {
+				alert(JSON.stringify(data));
+			} else {
+				alert(id);
+				requestSignupAsPost(id, password).then((res) => {
+					onRequestComplete(res.data.success);
+				});	
+			}
         },
     }
 }
