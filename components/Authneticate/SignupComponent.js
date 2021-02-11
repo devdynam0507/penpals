@@ -7,19 +7,6 @@ import { isJoined, requestSignupAsPost } from '../../server/asyncConnections/Use
 
 class SignupComponent extends Component {
 	
-	constructor(props) {
-		super(props);
-	}
-	
-	componentWillMount() {
-		const userObjectSize = Object.keys(this.props.user).length;
-		
-		if(this.props.isLoggedIn) {
-			alert('이미 로그인 된 회원입니다.');
-			Router.push('/')
-		}
-	}
-	
 	render() {
 		return (
 			<>
