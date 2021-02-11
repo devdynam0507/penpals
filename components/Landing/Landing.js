@@ -17,6 +17,7 @@ export default function Landing(props) {
 				털어놓고싶은데 내 약점을 보이는거같아 주변사람들에게 털어놓긴 힘들 때, <br/>
 				Untitled는 익명의 누군가와 대화할 수 있는 펜팔형 서비스입니다. <br/>
 			</p>
+			<p> {props.user.id} </p>
 			<div class={styles ['landing-start-button-event-wrapper']}>
 				<Link href='/signin'>
 					<button class={styles ['landing-start-button-style']}>

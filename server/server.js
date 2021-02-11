@@ -14,9 +14,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-dotenv.config();
+const UserModel = require('./models/User');
 
-const User = require('./models/User');
+dotenv.config();
 
 app.prepare().then(() => {
   const server = express();
@@ -47,66 +47,47 @@ app.prepare().then(() => {
   );
 	
   server.post('/api/auth/signin', (req, res) => {
-    User.findOne({identifier: req.body.identifier, password: req.body.password }, function(err, user) {
-      if(err) {
-        res.send(err);
-      } else {
-        if(user != null) {
-          res.json({
-            identifier: user.identifier,
-            password: user.password,
-            exists: true
-         });
-        } else {
-          res.json({ exists: false });
-        }
-      }
-    })
+  		UserModel.findByIdAndPassword(req.body.identifier, req.body.password, (err, user, json) => {
+			if(err != null) {
+				console.log(err);
+				res.status(500).send('Signin: internel server error')
+			} else {
+				res.json(json);							
+			}
+		});
   });
 	
   server.post('/api/auth/signout', (req, res) => {
-	 User.findOne({ indentifier: req.body.identifier }, function(err, user) {
-		 if(err) {
-			 res.json({
-				 error: 500
-			 });
-			 console.log(err);
-		 } else if(user != null) {
-			 user.published_date = Date.now;
-			 user.save(function(err, product) {
-				console.log('updated user data ' + user.published_date); 
-			 });
-		 }
-	 }) 
+		UserModel.updateUser(req.body.identifier, (err, user, json) => {
+			if(err != null) {
+				console.log(err);
+				res.status(500).send('Signout: internal server error');
+			} else {
+				res.json(json);
+			}
+		})
   });
 	
   server.post('/api/auth/signup', (req, res) => {
 	 const id = req.body.identifier;
 	 const password = req.body.password;
 	  
-	 User.create({ identifier: id, password: password }, (err, user) => {
-		if(err) {
-			 res.json({ status: 500, error: err });
-			 console.log('failed ' + err);
-		} else {
-			 res.json( { success: true, id: id, password: password });
-		} 
+	 UserModel.createUser(id, password, (err, user, json) => {
+	 	console.log(json);
+		 res.json(json);
+		 
 	 });
   });
 	
   server.get('/api/auth/user', (req, res) => {
-	  User.findOne({ identifier: req.query.identifier }, function(err, user) {
-		 console.log('get request: ' + req.query.identifier);
-	  	 if(err) {
-			 res.json({
-				 error: 500
-			 });
-		 } else if(user != null) {
-			 res.json({ exists: true });
+	 UserModel.findById(req.query.identifier, (err, user, json) => {
+		 if(err) {
+			 console.log(err);
+			 res.status(500).send('isJoined: internal server error');
 		 } else {
-			 res.json({ exists: false });
+	  		 res.json(json);
 		 }
-	  })
+	 });
   });
 
   server.all('*', (req, res) => {
