@@ -51,8 +51,6 @@ app.prepare().then(() => {
       if(err) {
         res.send(err);
       } else {
-		console.log(user);
-		console.log(req.body.password);
         if(user != null) {
           res.json({
             identifier: user.identifier,
@@ -86,31 +84,25 @@ app.prepare().then(() => {
 	 const id = req.body.identifier;
 	 const password = req.body.password;
 	  
-	 console.log("id: " + id + " password: " + password);
-	 console.log('signup req: ' + req);
-	  
 	 User.create({ identifier: id, password: password }, (err, user) => {
 		if(err) {
 			 res.json({ status: 500, error: err });
 			 console.log('failed ' + err);
 		} else {
 			 res.json( { success: true, id: id, password: password });
-		 	 console.log('success ' + user);
 		} 
 	 });
   });
 	
   server.get('/api/auth/user', (req, res) => {
 	  User.findOne({ identifier: req.query.identifier }, function(err, user) {
+		 console.log('get request: ' + req.query.identifier);
 	  	 if(err) {
 			 res.json({
 				 error: 500
 			 });
 		 } else if(user != null) {
-			 res.json({
-				 identifier: user.identifier,
-				 exists: true
-			 });
+			 res.json({ exists: true });
 		 } else {
 			 res.json({ exists: false });
 		 }

@@ -19,7 +19,6 @@ class BaseComponent extends Component {
             const userRefToJSON = JSON.parse(userRef);
             
             this.props.dispatch(signin(userRefToJSON.data.id, userRefToJSON.data.password, userRefToJSON.data.exists));
-			console.log('dispatched');
         }
     }
 
@@ -28,7 +27,6 @@ class BaseComponent extends Component {
 		// 자식 컴포넌트에선 props로 받아서 유저정보 접근 가능
 		// BaseComponent에서 redux로 유저정보 패치받음 line:43
 		const child = React.cloneElement(this.props.children, { user: this.props.user });
-		console.log('rendered');
 		
         return (
             <div>

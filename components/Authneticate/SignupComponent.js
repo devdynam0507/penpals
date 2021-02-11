@@ -32,7 +32,7 @@ class SignupComponent extends Component {
 
 const onRequestComplete = (success) => {
 	if(success) {
-		Router.push('/');
+		Router.back();
 	} else {
 		alert('Signup rejected');
 	}
@@ -52,12 +52,17 @@ const mapDispatchToProps = (dispatch) => {
             const password = data.password;
 			
 			if(id == undefined || password == undefined) {
-				alert(JSON.stringify(data));
+				alert("id, password를 입력해주세요.");
 			} else {
-				alert(id);
-				requestSignupAsPost(id, password).then((res) => {
-					onRequestComplete(res.data.success);
-				});	
+				const user = await isJoined(id);
+				
+				if(!user.data.exists) {
+					requestSignupAsPost(id, password).then((res) => {
+						onRequestComplete(res.data.success);
+					});	
+				} else {
+					alert('이미 가입된 회원입니다. 다른 아이디를 사용해주세요.')
+				}
 			}
         },
     }

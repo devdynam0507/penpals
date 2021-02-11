@@ -23,7 +23,7 @@ class SigninComponenet extends Component {
 
 function onRequestComplete(isSuccess) {
     if(isSuccess) {
-        Router.push('/');
+        Router.back();
     } else {
         alert('Authentication rejected..');
     }
@@ -42,12 +42,9 @@ const mapDispatchToProps = (dispatch) => {
             const id = data.id;
             const password = data.password;
             
-            requestSigninAsPost(id, password).then((res) => {
-				console.log(JSON.stringify(res));
-				
+            requestSigninAsPost(id, password).then((res) => {			
 				if(res.data.exists) {
 					const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
-					alert(JSON.stringify(actionRes));				
 					localStorage.setItem('user', JSON.stringify(actionRes));	
 				}
 				
