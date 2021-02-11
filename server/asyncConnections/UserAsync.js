@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { encrypt } from '../security/securityHash';
 
 export const requestSigninAsPost = async (username, password) => {
+	console.log(password);
     const response = await axios.post('/api/auth/signin', {
         identifier: username,
-        password: password 
+        password: encrypt(password.trim())
     })
      .catch((error) => {
          console.log(error);
@@ -26,9 +28,10 @@ export const handleSignout = async (user, onSignout) => {
 }
 
 export const requestSignupAsPost = async (id, password) => {
+	console.log(password);
 	const res = await axios.post('api/auth/signup', {
 		identifier: id,
-		password: password
+		password: encrypt(password.trim()),
 	})
 	
 	return res;

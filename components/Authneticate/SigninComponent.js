@@ -44,10 +44,14 @@ const mapDispatchToProps = (dispatch) => {
             
             requestSigninAsPost(id, password).then((res) => {
 				console.log(JSON.stringify(res));
-				const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
-				alert(JSON.stringify(actionRes));				
-				localStorage.setItem('user', JSON.stringify(actionRes));
-                onRequestComplete(actionRes.data.exists);               
+				
+				if(res.data.exists) {
+					const actionRes = dispatch(signin(res.data.identifier, res.data.password, res.data.exists));
+					alert(JSON.stringify(actionRes));				
+					localStorage.setItem('user', JSON.stringify(actionRes));	
+				}
+				
+                onRequestComplete(res.data.exists);               
             });
         }
     }

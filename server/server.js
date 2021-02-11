@@ -51,6 +51,8 @@ app.prepare().then(() => {
       if(err) {
         res.send(err);
       } else {
+		console.log(user);
+		console.log(req.body.password);
         if(user != null) {
           res.json({
             identifier: user.identifier,
