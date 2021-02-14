@@ -15,3 +15,6 @@ export const signout = (user) => ({
 		user: user
 	}
 });
+
+export const GET_AUTH = "GET_AUTH";
+export const getAuth = () => ({ type: GET_AUTH });

@@ -1,4 +1,4 @@
-import { SIGNIN, SIGNOUT } from '../actions/authenticateAction';
+import { SIGNIN, SIGNOUT, GET_AUTH } from '../actions/authenticateAction';
 
 const defaultState = {
     isLoggedIn: false,
@@ -21,6 +21,10 @@ const authenticateReducer = (state = defaultState, action) => {
 				fetchingUpdate: false,
 				isLoggedIn: false,
 				user: {}
+			}
+		case GET_AUTH:
+			return {
+				...state,
 			}
         default:
             return state;

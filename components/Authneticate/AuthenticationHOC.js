@@ -7,17 +7,19 @@ export default class AuthenticationHOC extends Component {
 		super(props);
 	}
 	
-	componentDidUpdate() {
+	componentWillUpdate() {
 		if(this.props.isLoggedIn) {
-			alert('이미 로그인 된 회원입니다.');
 			// Messenger Component로 이동.
+			Router.push('/messenger');
 		}
 	}
 	
 	render() {
 		return (
 			<>
-				{ this.props.children }
+				{ !this.props.isLoggedIn ? 
+					this.props.children : null
+				}
 			</>
 		)
 	}

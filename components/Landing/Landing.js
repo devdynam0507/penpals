@@ -19,17 +19,23 @@ export default function Landing(props) {
 			</p>
 			<p> {props.user.id} </p>
 			<div class={styles ['landing-start-button-event-wrapper']}>
-				<Link href='/signin'>
-					<button class={styles ['landing-start-button-style']}>
-						<a>시작하기</a>
-					</button>
-				</Link> <br/>
 				{ userObjectSize > 0 ? 
-					<Link href='/'>
-						<a onClick={ handleSignoutWrapper }> 로그아웃</a>
-					</Link>
+					<>
+						<Link href='/messenger'>
+						<button class={styles ['landing-start-button-style']}>
+							<a>시작하기</a>
+						</button>
+						</Link>
+						<Link href='/'>
+							<a onClick={ handleSignoutWrapper }> 로그아웃</a>
+						</Link>
+					</>
 					:
-					null
+					<Link href='/signin'>
+						<button class={styles ['landing-start-button-style']}>
+							<a>로그인</a>
+						</button>
+					</Link>
 				}
 			</div>
         </>

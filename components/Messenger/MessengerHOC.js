@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { React, Component } from 'react';
+import Router from 'next/router';
 
 export default class MessengerHOC extends Component {
 	
@@ -7,13 +8,17 @@ export default class MessengerHOC extends Component {
 	}
 	
 	componentDidUpdate() {
-		
+		if(!this.props.isLoggedIn) {
+			Router.push('/signin');
+		}
 	}
 	
 	render() {
+		const children = this.props.children; 
+		console.log(children);
 		return (
 			<>
-				{ this.props.children }
+				{ children }
 			</>
 		)
 	}

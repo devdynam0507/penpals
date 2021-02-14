@@ -14,13 +14,18 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const UserModel = require('./models/User');
+require('./models/User');
+require('./models/Message');
+
+const UserBuisness = require('./db/userBuisnessLogic');
+const MessengerBuisness = require('./db/messengerBuisnessLogic');
+
+const socket = require('./socket/serverSocket');
 
 dotenv.config();
 
 app.prepare().then(() => {
   const server = express();
-
   axios.defaults.baseURL = 'https://penpal-vafhi.run.goorm.io' // the prefix of the URL
   console.log('axios base: ' + axios.defaults.baseURL);
 	
@@ -47,7 +52,7 @@ app.prepare().then(() => {
   );
 	
   server.post('/api/auth/signin', (req, res) => {
-  		UserModel.findByIdAndPassword(req.body.identifier, req.body.password, (err, user, json) => {
+  		UserBuisness.findByIdAndPassword(req.body.identifier, req.body.password, (err, user, json) => {
 			if(err != null) {
 				console.log(err);
 				res.status(500).send('Signin: internel server error')
@@ -58,7 +63,7 @@ app.prepare().then(() => {
   });
 	
   server.post('/api/auth/signout', (req, res) => {
-		UserModel.updateUser(req.body.identifier, (err, user, json) => {
+		UserBuisness.updateUser(req.body.identifier, (err, user, json) => {
 			if(err != null) {
 				console.log(err);
 				res.status(500).send('Signout: internal server error');
@@ -72,7 +77,7 @@ app.prepare().then(() => {
 	 const id = req.body.identifier;
 	 const password = req.body.password;
 	  
-	 UserModel.createUser(id, password, (err, user, json) => {
+	 UserBuisness.createUser(id, password, (err, user, json) => {
 	 	console.log(json);
 		 res.json(json);
 		 
@@ -80,7 +85,7 @@ app.prepare().then(() => {
   });
 	
   server.get('/api/auth/user', (req, res) => {
-	 UserModel.findById(req.query.identifier, (err, user, json) => {
+	 UserBuisness.findById(req.query.identifier, (err, user, json) => {
 		 if(err) {
 			 console.log(err);
 			 res.status(500).send('isJoined: internal server error');
@@ -89,8 +94,39 @@ app.prepare().then(() => {
 		 }
 	 });
   });
+	
+  server.post('/api/messenger/send', (req, res) => {	  
+	 UserBuisness.randomUsers(50, (users) => {
+		 const messages = [];
+		 const message = req.body.message;
+		 
+		 users.forEach(e => { 
+			if(e !== undefined) {
+				const newMessage = {
+					...message,
+					receiverId: e.identifier
+				};
+
+				messages.push(newMessage);
+			}
+		 });
+		 		 
+		 MessengerBuisness.insertMessages(messages, (json) => {
+			const newResponse = {
+				...json,
+				messages: messages
+			};
+			 
+			res.json(newResponse);
+		 });
+	 })
+
+  });
 
   server.all('*', (req, res) => {
+	res.header("Access-Control-Allow-Origin", '*');
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	  
     return handle(req, res);
   })
 
@@ -98,4 +134,5 @@ app.prepare().then(() => {
     console.log('next+expresss running on port ${port}');
   })
 
+  socket.bindSocket(server); //소켓 바인딩
 })
