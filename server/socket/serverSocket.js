@@ -41,14 +41,14 @@ const bindSocket = (app) => {
 		})
 	})
 	
-  _app.all('*', (req, res, next) => {
+    _app.all('*', (req, res, next) => {
       res.header("Access-Control-Allow-Origin", "*");
 	  res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	  
       next();
-  })
+    })
 	
-  _http.listen(3003);
+    _http.listen(3003);
 }
 
 module.exports = {
