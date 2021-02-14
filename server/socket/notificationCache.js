@@ -18,10 +18,14 @@ const getSession = (username) => {
 const removeSession = (sessionId) => {
 	userSessionCache.forEach((value, key, mapObject) => {
 		const session = value;
+		let isBreak = false;
 		
 		if(session !== undefined && session.id === sessionId) {
 			userSessionCache.delete(key);
+			isBreak = true;
 		}
+		
+		return isBreak;
 	})
 }
 
